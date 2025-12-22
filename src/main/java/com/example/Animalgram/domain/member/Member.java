@@ -25,10 +25,8 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username; // ouath 전용
-
     @Column(name = "member_name", nullable = false, length = 50)
-    private String name;
+    private String username;
 
     @Column(nullable = false, length = 100, unique = true)
     private String email;

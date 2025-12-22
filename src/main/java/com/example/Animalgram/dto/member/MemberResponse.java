@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class MemberResponse {
     private Long id;
 
-    private String name;
+    private String userName;
 
     private String email;
 
@@ -33,7 +33,7 @@ public class MemberResponse {
     public static MemberResponse create(Member member){
         return MemberResponse.builder()
                 .id(member.getId())
-                .name(member.getName())
+                .userName(member.getUsername())
                 .email(member.getEmail())
                 .status(member.getStatus())
                 .address(member.getAddress())
