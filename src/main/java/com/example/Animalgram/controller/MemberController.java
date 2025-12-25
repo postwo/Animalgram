@@ -56,4 +56,11 @@ public class MemberController {
         var response = memberService.logout(accessToken,httpResponse);
         return Api.OK(response);
     }
+
+//    @GetMapping("{pageMemberId}")
+//    public Api<MemberProfileResponse> profile(@PathVariable int pageMemberId ,@AuthenticationPrincipal Member member){
+//        var response = memberService.profile(pageMemberId,member);
+//        return Api.OK(response);
+//    }
+
 }

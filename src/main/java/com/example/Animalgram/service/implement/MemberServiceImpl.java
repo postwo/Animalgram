@@ -5,10 +5,7 @@ import com.example.Animalgram.common.error.MemberErrorCode;
 import com.example.Animalgram.common.error.TokenErrorCode;
 import com.example.Animalgram.common.exception.ApiException;
 import com.example.Animalgram.domain.member.Member;
-import com.example.Animalgram.dto.member.LoginRequest;
-import com.example.Animalgram.dto.member.LoginResponse;
-import com.example.Animalgram.dto.member.MemberResponse;
-import com.example.Animalgram.dto.member.RegisterRequest;
+import com.example.Animalgram.dto.member.*;
 import com.example.Animalgram.repository.MemberRepository;
 import com.example.Animalgram.service.MemberService;
 import com.example.Animalgram.util.JwtTokenProvider;
@@ -121,6 +118,17 @@ public class MemberServiceImpl implements MemberService {
 
         return "로그아웃 성공";
     }
+
+//    @Override
+//    public MemberProfileResponse profile(int pageMemberId, Member member) {
+//        String email = member.getEmail();
+//
+//        Member mymember= memberRepository.findByEmail(email).orElseThrow(()->{
+//            throw new ApiException(MemberErrorCode.MEMBER_NOT_FOUND,"사용자를 찾을 수 없음.");
+//        });
+//
+//
+//    }
 
 
 }

@@ -4,13 +4,10 @@ package com.example.Animalgram.domain.member;
 import com.example.Animalgram.domain.BaseTimeEntity;
 import com.example.Animalgram.domain.member.enums.MemberStatus;
 import com.example.Animalgram.dto.member.RegisterRequest;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
@@ -26,7 +23,7 @@ public class Member extends BaseTimeEntity {
     private Long id;
 
     @Column(name = "member_name", nullable = false, length = 50)
-    private String username;
+    private String memberName;
 
     @Column(nullable = false, length = 100, unique = true)
     private String email;
@@ -38,8 +35,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_status")
     private MemberStatus status;
 
-    @Column(nullable = false, length = 150)
-    private String address;
+    private boolean social;
 
     private String refreshToken;
 
@@ -49,20 +45,20 @@ public class Member extends BaseTimeEntity {
 
     public static Member create(RegisterRequest request){
         return Member.builder()
-                .address(request.getAddress())
                 .email(request.getEmail())
-                .name(request.getName())
+                .memberName(request.getMemberName())
                 .password(request.getPassword())
                 .status(MemberStatus.USER)
+                .social(false)
                 .build();
     }
 
-    public static Member createOauth2Member(String name,String username,String eamil){
+    public static Member createOauth2Member(String name,String memberName,String eamil){
         return Member.builder()
-                .name(name)
-                .username(username)
+                .memberName(memberName)
                 .email(eamil)
                 .status(MemberStatus.USER)
+                .social(true)
                 .build();
     }
 
