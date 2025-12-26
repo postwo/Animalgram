@@ -25,6 +25,7 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final SubscribeService subscribeService;
 
+    // 프로필페이지
     @GetMapping("/{memberId}")
     public Api<MemberProfileResponse> profile(@PathVariable int memberId, @AuthenticationPrincipal Member member) {
         var response = myPageService.profile(memberId,member);

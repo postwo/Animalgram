@@ -29,6 +29,7 @@ public class ImageController {
         return Api.OK(responses);
     }
 
+    // 이미지 업로드
     @PostMapping("/")
     public Api<String> imageUpload(@RequestBody ImageUploadRequest imageUploadRequest , @AuthenticationPrincipal Member member){
         if (imageUploadRequest.getFile().isEmpty()){

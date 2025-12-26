@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface SubscribeService {
     List<SubscribeResponse> subscribeList(Member member, int pageUserId);
+
+    void subscribe(int id, int toUserId);
+
+    void cancleSubscribe(int id, int toUserId);
 }
