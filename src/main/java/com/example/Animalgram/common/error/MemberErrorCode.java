@@ -3,8 +3,8 @@ package com.example.Animalgram.common.error;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public enum MemberErrorCode implements ErrorCodeIfs{
 
     PASSWORD_NOT_MATCH(400 , 1401 , "비밀번호가 일치하지 않습니다."),

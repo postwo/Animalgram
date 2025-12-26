@@ -68,3 +68,6 @@ jwt:
   secret: ${key}
   access-expiration-time: 1800000 # 30분 (밀리초)
   refresh-expiration-time: 604800000 # 7일 (밀리초)
+
+file:
+  path: C:/workspace/springbootwork/upload/

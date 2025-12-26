@@ -119,16 +119,4 @@ public class MemberServiceImpl implements MemberService {
         return "로그아웃 성공";
     }
 
-//    @Override
-//    public MemberProfileResponse profile(int pageMemberId, Member member) {
-//        String email = member.getEmail();
-//
-//        Member mymember= memberRepository.findByEmail(email).orElseThrow(()->{
-//            throw new ApiException(MemberErrorCode.MEMBER_NOT_FOUND,"사용자를 찾을 수 없음.");
-//        });
-//
-//
-//    }
-
-
 }

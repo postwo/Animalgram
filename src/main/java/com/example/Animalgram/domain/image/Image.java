@@ -33,6 +33,12 @@ public class Image {
     @OneToMany(mappedBy = "image")
     private List<Likes> likes;
 
+    @Transient //DB에 컬럼이 만들어지지 않는다 이걸 만든이유는 프론트 단에서 like 표시를 변경해주기 위해 사용
+    private boolean likeState;
+
+    @Transient //DB에 컬럼이 만들어지지 않는다 이걸 만든이유는 프론트 단에서 like 표시를 변경해주기 위해 사용
+    private int likeCount;
+
     @CreatedDate
     @Column(name = "createDate_at", updatable = false)
     private LocalDateTime createDate;

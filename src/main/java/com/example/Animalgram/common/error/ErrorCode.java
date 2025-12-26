@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public enum ErrorCode implements ErrorCodeIfs {
     //외부코드 ,내부코드(이거는 내가 서비스에 사용할 에러코드 이다,HttpStatus코드 와 일치 할 수도 있지만 일치 하지 않을수도 있다) ,그냥 내용
     OK(HttpStatus.OK.value(), 200, "성공"),

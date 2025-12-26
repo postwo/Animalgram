@@ -15,5 +15,6 @@ public interface MemberService {
 
     String logout(String accessToken, HttpServletResponse httpResponse);
 
-//    MemberProfileResponse profile(int pageMemberId, Member member);
+
+
 }

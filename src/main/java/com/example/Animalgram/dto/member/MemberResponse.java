@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberResponse {
-    private Long id;
+    private int id;
 
     private String memberName;
 

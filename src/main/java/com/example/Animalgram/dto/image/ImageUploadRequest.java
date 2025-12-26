@@ -1,10 +1,9 @@
 package com.example.Animalgram.dto.image;
 
+import com.example.Animalgram.domain.image.Image;
 import com.example.Animalgram.domain.member.Member;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.awt.*;
 
 @Data
 public class ImageUploadRequest {

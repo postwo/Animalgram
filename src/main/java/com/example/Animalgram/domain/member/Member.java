@@ -2,12 +2,15 @@ package com.example.Animalgram.domain.member;
 
 
 import com.example.Animalgram.domain.BaseTimeEntity;
+import com.example.Animalgram.domain.image.Image;
 import com.example.Animalgram.domain.member.enums.MemberStatus;
 import com.example.Animalgram.dto.member.RegisterRequest;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -20,7 +23,7 @@ import java.time.LocalDateTime;
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "member_name", nullable = false, length = 50)
     private String memberName;
@@ -30,6 +33,10 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false, length = 100)
     private String password;
+
+    private String profileImageUrl;
+    private String website; //웹사이트
+    private String bio; //자기소개
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_status")
@@ -41,6 +48,10 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "unregistered_at")
     private LocalDateTime unregisteredAt; // 탈퇴 시간
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"user"})
+    private List<Image> images;
 
 
     public static Member create(RegisterRequest request){
