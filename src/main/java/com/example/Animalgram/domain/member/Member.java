@@ -4,12 +4,10 @@ package com.example.Animalgram.domain.member;
 import com.example.Animalgram.domain.BaseTimeEntity;
 import com.example.Animalgram.domain.image.Image;
 import com.example.Animalgram.domain.member.enums.MemberStatus;
-import com.example.Animalgram.dto.member.RegisterRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -23,10 +21,11 @@ import java.util.List;
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(name = "member_name", nullable = false, length = 50)
-    private String memberName;
+    @Column(nullable = false, length = 100)
+//    @Size(max = 50, message = "닉네임은 100자 이내로 입력해주세요.")
+    private String nickname;
 
     @Column(nullable = false, length = 100, unique = true)
     private String email;
@@ -35,42 +34,15 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     private String profileImageUrl;
-    private String website; //웹사이트
     private String bio; //자기소개
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_status")
     private MemberStatus status;
 
-    private boolean social;
-
-    private String refreshToken;
-
-    @Column(name = "unregistered_at")
-    private LocalDateTime unregisteredAt; // 탈퇴 시간
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"user"})
+    @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"member"})
     private List<Image> images;
 
-
-    public static Member create(RegisterRequest request){
-        return Member.builder()
-                .email(request.getEmail())
-                .memberName(request.getMemberName())
-                .password(request.getPassword())
-                .status(MemberStatus.USER)
-                .social(false)
-                .build();
-    }
-
-    public static Member createOauth2Member(String name,String memberName,String eamil){
-        return Member.builder()
-                .memberName(memberName)
-                .email(eamil)
-                .status(MemberStatus.USER)
-                .social(true)
-                .build();
-    }
 
 }

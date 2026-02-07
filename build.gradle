@@ -40,6 +40,8 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     // Spring boot 3.x이상에서 QueryDsl 패키지를 정의하는 방법
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"

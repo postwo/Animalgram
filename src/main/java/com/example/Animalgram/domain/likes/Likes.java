@@ -29,7 +29,7 @@ public class Likes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @JoinColumn(name = "imageId")
     @ManyToOne
@@ -38,7 +38,7 @@ public class Likes {
     @JsonIgnoreProperties({"images"})
     @JoinColumn(name = "memberId")
     @ManyToOne
-    private Member user; //누가 좋아요를 했는지
+    private Member member; //누가 좋아요를 했는지
 
     @CreatedDate
     @Column(name = "createDate_at", updatable = false)
