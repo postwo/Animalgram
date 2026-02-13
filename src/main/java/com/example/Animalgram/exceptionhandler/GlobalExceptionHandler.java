@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Order(value = Integer.MAX_VALUE)   // 가장 마지막에 실행 적용 // default가 max_value이다 지금은 그냥 명시한거다
 public class GlobalExceptionHandler {
 
+    // validation(@valid) 에러 처리
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
     public ResponseEntity<Api<Object>> handleValidationExceptions(Exception ex) {
         log.error("Validation error: ", ex);
