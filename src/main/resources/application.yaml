@@ -25,6 +25,7 @@ spring:
 
   jwt:
     secret-key: ${key}
+    expiration-ms: 3600000 # 1시간
 
   devtools:
     restart:

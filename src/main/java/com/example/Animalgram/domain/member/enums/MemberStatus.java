@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum MemberStatus {
 
-    USER,
-    ADMIN
+    ROLE_USER,
+    ROLE_ADMIN
     ;
 
 

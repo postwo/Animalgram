@@ -25,7 +25,6 @@ public class Member extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false, length = 100, unique = true)
-//    @Size(max = 50, message = "?됰꽕?꾩? 100???대궡濡??낅젰?댁＜?몄슂.")
     private String username;
 
     @Column(nullable = false, length = 100, unique = true)
@@ -35,7 +34,7 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     private String profileImageUrl;
-    private String bio; //?먭린?뚭컻
+    private String bio;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_status")
@@ -50,7 +49,7 @@ public class Member extends BaseTimeEntity {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(encodedPassword)
-                .status(MemberStatus.USER)
+                .status(MemberStatus.ROLE_USER)
                 .build();
     }
 
