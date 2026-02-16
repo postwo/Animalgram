@@ -8,4 +8,8 @@ import com.example.Animalgram.dto.response.SignupResponse;
 public interface MemberService {
     SignupResponse signup(SignupRequest request);
     LoginResponse login(LoginRequest request);
+
+    LoginResponse refresh(String refreshToken);
+
+    void logout(String accessToken);
 }

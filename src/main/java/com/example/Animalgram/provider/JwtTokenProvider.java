@@ -17,19 +17,30 @@ public class JwtTokenProvider {
 
     public JwtTokenProvider(
             @Value("${spring.jwt.secret-key}") String secretKey,
-            @Value("${spring.jwt.expiration-ms:3600000}") long expiration
+            @Value("${spring.jwt.expiration-ms}") long expiration
     ) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.expiration = expiration;
     }
 
+    public String generateAccessToken(String username) {
+        long expiration_30m = 1000L*60*60; //30분
 
-    // accessToken
-    public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration_30m))
+                .signWith(key)
+                .compact();
+    }
+
+    public String generateRefreshToken(String username) {
+        long expiration_7d = 1000L*60*60*24*7; //7일
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration_7d))
                 .signWith(key)
                 .compact();
     }
