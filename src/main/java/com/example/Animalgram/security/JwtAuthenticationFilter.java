@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,6 +22,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -29,9 +32,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             var username = jwtTokenProvider.getUsernameFromToken(token);
             var member = memberRepository.findByUsername(username).orElse(null);
 
+            UserDetails memberDetails =  userDetailsService.loadUserByUsername(username);
+
             if (member != null){
                 // 나중에 권한 처리하기
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(member,null,null);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(memberDetails,null,memberDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

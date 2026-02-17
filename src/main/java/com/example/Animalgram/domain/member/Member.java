@@ -3,7 +3,6 @@ package com.example.Animalgram.domain.member;
 
 import com.example.Animalgram.domain.BaseTimeEntity;
 import com.example.Animalgram.domain.image.Image;
-import com.example.Animalgram.domain.member.enums.MemberStatus;
 import com.example.Animalgram.dto.request.SignupRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -38,9 +37,7 @@ public class Member extends BaseTimeEntity {
     private String profileImageUrl;
     private String bio;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "member_status")
-    private MemberStatus status;
+    private String status;
 
     @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"member"})
@@ -51,7 +48,7 @@ public class Member extends BaseTimeEntity {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(encodedPassword)
-                .status(MemberStatus.ROLE_USER)
+                .status("ROLE_USER")
                 .build();
     }
 
