@@ -11,6 +11,9 @@ import com.example.Animalgram.dto.response.SignupResponse;
 import com.example.Animalgram.provider.JwtTokenProvider;
 import com.example.Animalgram.repository.MemberRepository;
 import com.example.Animalgram.service.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,7 +64,7 @@ public class MemberServiceImplement implements MemberService {
 
     @Override
     @Transactional
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request, HttpServletResponse hsResponse) {
         var member = memberRepository.findByEmail(request.getEmail()).orElseThrow(()->new ApiException(MemberErrorCode.MEMBER_NOT_FOUND,"사용자가 없습니다"));
 
         if(!passwordEncoder.matches(request.getPassword(),member.getPassword())){
@@ -74,28 +77,38 @@ public class MemberServiceImplement implements MemberService {
         member.setRefreshToken(refreshToken);
         memberRepository.save(member);
 
+        Cookie refreshCookie = new Cookie("refreshToken",member.getRefreshToken());
+        refreshCookie.setPath("/");
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setMaxAge(7*24*60*60); // 7일
+        hsResponse.addCookie(refreshCookie);// 응답할때 쿠키도 담아서 보낸다
 
-        return LoginResponse.of(accessToken,refreshToken,member);
+
+        return LoginResponse.of(accessToken);
     }
 
     @Override
     @Transactional
-    public LoginResponse refresh(String refreshToken) {
-        var token = refreshToken.replace("Bearer ", "");
+    public LoginResponse refresh(HttpServletRequest request) {
+        String refreshToken =null;
+        if (request.getCookies() != null){
+            for(Cookie cookie : request.getCookies()){
+                if (cookie.getName().equals("refreshToken")){
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
 
-        if (!jwtTokenProvider.validateToken(token)) {
+        if (refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)){
             throw new ApiException(TokenErrorCode.INVALID_REFRESH_TOKEN,"refresh Token이 유효하지 않습니다");
         }
 
-        var username = jwtTokenProvider.getUsernameFromToken(token);
+        var username = jwtTokenProvider.getUsernameFromToken(refreshToken);
         var member = getByUsernameOrThrow(username);
 
-        log.info("member token {}",member.getRefreshToken());
-        log.info("token {}",token);
-
-        if (!token.equals(member.getRefreshToken())) {
-            throw new ApiException(TokenErrorCode.REFRESH_TOKEN_NOT_MATCH,"서버에 저장된 refresh token과 일치하지 않습니다");
-        }
+       if (!refreshToken.equals(member.getRefreshToken())){
+           throw new ApiException(TokenErrorCode.REFRESH_TOKEN_NOT_MATCH,"서버에 저장된 refresh Token과 일치하지 않습니다");
+       }
 
         var newAccessToken = jwtTokenProvider.generateAccessToken(username);
         var newRefreshToken = jwtTokenProvider.generateRefreshToken(username);
@@ -103,17 +116,23 @@ public class MemberServiceImplement implements MemberService {
         member.setRefreshToken(newRefreshToken);
         memberRepository.save(member);
 
-        return LoginResponse.refreshOf(newAccessToken,newRefreshToken);
+        return LoginResponse.refreshOf(newAccessToken);
     }
 
     @Override
     @Transactional
-    public void logout(String accessToken) {
+    public void logout(String accessToken, HttpServletResponse response) {
         var token = accessToken.replace("Bearer ", "");
         var username = jwtTokenProvider.getUsernameFromToken(token);
         var member=  getByUsernameOrThrow(username);
 
         member.setRefreshToken(null);
         memberRepository.save(member);
+
+        Cookie refreshCookie = new Cookie("refreshToken",null);
+        refreshCookie.setPath("/");
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setMaxAge(0);
+        response.addCookie(refreshCookie);
     }
 }
