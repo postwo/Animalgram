@@ -71,12 +71,13 @@ public class MemberServiceImplement implements MemberService {
             throw new ApiException(MemberErrorCode.PASSWORD_NOT_MATCH,"비밀번호가 일치하지 않습니다");
         }
 
-        var accessToken = jwtTokenProvider.generateAccessToken(member.getUsername());
+        var accessToken = jwtTokenProvider.generateAccessToken(member.getUsername(),member.getStatus());
         var refreshToken = jwtTokenProvider.generateRefreshToken(member.getUsername());
 
         member.setRefreshToken(refreshToken);
         memberRepository.save(member);
 
+        //HttpOnly 쿠키: 자바스크립트에서 refreshToken 읽기 어렵게 해서 토큰 탈취 위험 감소
         Cookie refreshCookie = new Cookie("refreshToken",member.getRefreshToken());
         refreshCookie.setPath("/");
         refreshCookie.setHttpOnly(true);
@@ -110,7 +111,7 @@ public class MemberServiceImplement implements MemberService {
            throw new ApiException(TokenErrorCode.REFRESH_TOKEN_NOT_MATCH,"서버에 저장된 refresh Token과 일치하지 않습니다");
        }
 
-        var newAccessToken = jwtTokenProvider.generateAccessToken(username);
+        var newAccessToken = jwtTokenProvider.generateAccessToken(username,member.getStatus());
         var newRefreshToken = jwtTokenProvider.generateRefreshToken(username);
 
         member.setRefreshToken(newRefreshToken);

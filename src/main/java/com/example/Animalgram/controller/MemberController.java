@@ -29,7 +29,6 @@ public class MemberController {
     @PostMapping("/login")
     public Api<LoginResponse> login(@RequestBody @Valid LoginRequest request, HttpServletResponse hsResponse){
         var response = memberService.login(request,hsResponse);
-
         return Api.OK(response);
     }
 

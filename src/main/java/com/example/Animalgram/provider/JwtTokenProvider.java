@@ -23,11 +23,12 @@ public class JwtTokenProvider {
         this.expiration = expiration;
     }
 
-    public String generateAccessToken(String username) {
+    public String generateAccessToken(String username,String status) {
         long expiration_30m = 1000L*60*60; //30분
 
         return Jwts.builder()
                 .setSubject(username)
+                .claim("status",status) // 토큰에 권한 추가
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration_30m))
                 .signWith(key)
