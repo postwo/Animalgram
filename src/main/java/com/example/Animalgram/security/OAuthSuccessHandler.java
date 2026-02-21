@@ -23,6 +23,7 @@ import static com.example.Animalgram.security.RedirectUrlCookieFilter.REDIRECT_U
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private static final String LOCAL_REDIRECT_URL = "http://localhost:3000";
+    private static final int ACCESS_COOKIE_AGE = 60 * 60;
     private static final int REFRESH_COOKIE_AGE = 7 * 24 * 60 * 60;
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -45,6 +46,11 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String refreshToken = jwtTokenProvider.generateRefreshToken(member.getUsername());
         member.setRefreshToken(refreshToken);
         memberRepository.save(member);
+
+        Cookie accessCookie = new Cookie("accessToken", accessToken);
+        accessCookie.setPath("/");
+        accessCookie.setMaxAge(ACCESS_COOKIE_AGE);
+        response.addCookie(accessCookie);
 
         Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
         refreshCookie.setPath("/");
