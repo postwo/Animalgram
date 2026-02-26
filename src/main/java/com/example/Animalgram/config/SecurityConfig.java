@@ -9,6 +9,7 @@ import com.example.Animalgram.security.service.CustomOAuth2UserSservice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
@@ -48,9 +49,14 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/api/member/**" ,"/swagger-ui/**", "/v3/api-docs/**", "/oauth2/**", "/login/oauth2/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/member/recommendations", "/api/member/joined-meetups").authenticated()
+                        .requestMatchers("/api/member/**" ,"/swagger-ui/**", "/v3/api-docs/**", "/oauth2/**", "/login/oauth2/**", "/upload/**").permitAll()
+                        .requestMatchers("/connect-ws", "/connect-ws/**", "/connect", "/connect/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/post", "/api/post/").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/post/hashtags/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/post/*/comments").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/private/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers( "/api/post/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserSservice))
